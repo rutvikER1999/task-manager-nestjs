@@ -1,8 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly logger = new Logger(JwtAuthGuard.name);
   constructor(private readonly jwtService: JwtService) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -12,6 +13,12 @@ export class JwtAuthGuard implements CanActivate {
     // Check for token in session
     if (request.session?.jwt) {
       token = request.session.jwt;
+      this.logger.debug('Token found in session');
+    } else {
+      this.logger.debug('No token in session', { 
+        hasSession: !!request.session,
+        sessionKeys: request.session ? Object.keys(request.session) : 'no session'
+      });
     }
     
     // If no token in session, check Authorization header
@@ -19,11 +26,20 @@ export class JwtAuthGuard implements CanActivate {
       const authHeader = request.headers.authorization;
       if (authHeader && authHeader.startsWith('Bearer ')) {
         token = authHeader.substring(7);
+        this.logger.debug('Token found in Authorization header');
+      } else {
+        this.logger.debug('No token in Authorization header');
       }
     }
     
     // If still no token, unauthorized
     if (!token) {
+      this.logger.warn('No authentication token found', {
+        url: request.url,
+        method: request.method,
+        cookies: request.cookies,
+        headers: request.headers
+      });
       throw new UnauthorizedException('No authentication token found');
     }
 
@@ -32,6 +48,7 @@ export class JwtAuthGuard implements CanActivate {
       request.user = payload;
       return true;
     } catch (error) {
+      this.logger.error('Invalid authentication token', error.stack);
       throw new UnauthorizedException('Invalid authentication token');
     }
   }

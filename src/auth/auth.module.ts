@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TestCookieController } from './test-cookie.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, TestCookieController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   exports: [AuthService],
 })

@@ -59,7 +59,14 @@ export class AuthService {
         throw new UnauthorizedException({ status: 401, message: 'Invalid credentials' });
       }
       const token = this.signJWT({ id: user._id });
-      req.session = { jwt: token };
+      
+      // Ensure session is properly set
+      if (req.session) {
+        req.session.jwt = token;
+      } else {
+        req.session = { jwt: token };
+      }
+      
       return { status: 200, message: 'Login successful', data: { id: user._id, token: token } };
     }
   }
@@ -97,7 +104,13 @@ export class AuthService {
       }
   
       const token = this.signJWT({ id: user._id });
-      req.session = { jwt: token };
+      
+      // Ensure session is properly set
+      if (req.session) {
+        req.session.jwt = token;
+      } else {
+        req.session = { jwt: token };
+      }
   
       return {
         status: 200,
