@@ -25,6 +25,7 @@ async function bootstrap() {
       keys: ['your-secret-key'],
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'none',
+      secure: false,
     })    
   );
   app.enableCors({
