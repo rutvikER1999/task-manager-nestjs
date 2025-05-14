@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3000
+@urlPath = user
+
+### Signup (UserController stub)
+POST {{baseUrl}}/{{urlPath}}/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "firstname": "Test",
+  "lastname": "User",
+  "email": "test.user@example.com",
+  "password": "Test1234"
+}

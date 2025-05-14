@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:3000
+@urlPath = auth
+
+### Signup (Normal)
+POST {{baseUrl}}/{{urlPath}}/signup
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "email": "jane.doe@example.com",
+  "password": "Test@123",
+  "firstname": "Jane",
+  "lastname": "Doe"
+}
+
+### Signup (Google)
+POST {{baseUrl}}/{{urlPath}}/signup
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "firstname": "Jane",
+  "lastname": "Doe",
+  "email": "jane.doe1@example.com",
+  "googleId": "google-unique-id"
+}
+
+### Login (Normal)
+POST {{baseUrl}}/{{urlPath}}/login
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "email": "jane.doe@example.com",
+  "password": "Test@123"
+}
+
+### Login (Google)
+POST {{baseUrl}}/{{urlPath}}/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "jane.doe@example.com",
+  "googleId": "google-unique-id"
+}

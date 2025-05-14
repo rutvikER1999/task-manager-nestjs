@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:3000
+@urlPath = tasks
+
+### Login first to get session cookie
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "email": "jane.doe@example.com",
+  "password": "Test@123"
+}
+
+### Create Task
+POST {{baseUrl}}/{{urlPath}}
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "title": "Your task title",
+  "description": "Your task description"
+}
+
+### Edit Task
+PUT {{baseUrl}}/{{urlPath}}/<TASK_ID>
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "title": "Updated Task Title",
+  "description": "Updated description."
+}
+
+### Update Task Status
+PUT {{baseUrl}}/{{urlPath}}/<TASK_ID>/status
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "status": "INPROGRESS"
+}
+
+### Get All Tasks
+GET {{baseUrl}}/{{urlPath}}
+Accept: application/json
+withCredentials: true
+
+### Delete Task
+DELETE {{baseUrl}}/{{urlPath}}/<TASK_ID>
+Accept: application/json
+withCredentials: true
+
+### Search Tasks by Status
+GET {{baseUrl}}/{{urlPath}}/by-status?searchString=test
+Accept: application/json
+withCredentials: true
