@@ -15,7 +15,7 @@ export const configuration = () => ({
     ],
     maxAge: 24 * 7 * 3600000, // 7 days
     secure: process.env.NODE_ENV === 'production',
-    domain: process.env.COOKIE_DOMAIN,
+    domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : "http://localhost:3000",
   },
   database: {
     uri: process.env.MONGODB_URI,

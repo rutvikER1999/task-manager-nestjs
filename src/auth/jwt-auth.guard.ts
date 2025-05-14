@@ -32,6 +32,12 @@ export class JwtAuthGuard implements CanActivate {
       }
     }
     
+    // If still no token, check query parameters (useful for development)
+    if (!token && request.query.token) {
+      token = request.query.token;
+      this.logger.debug('Token found in query parameter');
+    }
+    
     // If still no token, unauthorized
     if (!token) {
       this.logger.warn('No authentication token found', {

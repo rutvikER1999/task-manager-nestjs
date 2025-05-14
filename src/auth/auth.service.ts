@@ -60,12 +60,11 @@ export class AuthService {
       }
       const token = this.signJWT({ id: user._id });
       
-      // Ensure session is properly set
-      if (req.session) {
-        req.session.jwt = token;
-      } else {
-        req.session = { jwt: token };
-      }
+      // Always create a new session object
+      req.session = { jwt: token };
+      
+      // Log for debugging
+      console.log('[Auth Service] Session created:', req.session);
       
       return { status: 200, message: 'Login successful', data: { id: user._id, token: token } };
     }

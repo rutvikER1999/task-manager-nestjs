@@ -19,21 +19,33 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = configuration();
 
+  // Determine environment
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  // Configure cookie session based on environment
   app.use(
     cookieSession({
-      name: 'session',
-      keys: ['your-secret-key'],
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'none',
-      secure: false,
-    })    
+      name: config.cookie.name,
+      keys: config.cookie.keys,
+      maxAge: config.cookie.maxAge,
+      secure: isProduction, // Only require secure in production
+      sameSite: isProduction ? 'none' : 'lax', // Use lax for development
+      httpOnly: true,
+      domain: undefined, // Don't set domain for local testing
+    }),
   );
+  
+  // Configure CORS based on environment
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Always allow these origins
+    origin: isProduction 
+      ? [process.env.COOKIE_DOMAIN || 'https://yourdomain.com'] // Production domains
+      : ['http://localhost:3000', 'http://127.0.0.1:3000'], // Development domains
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: isProduction ? ["set-cookie"] : undefined // Only needed for cross-domain in production
   });
+  
   app.use(passport.initialize());
   app.use(passport.session());
 
