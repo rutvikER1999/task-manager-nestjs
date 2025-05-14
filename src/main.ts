@@ -24,7 +24,6 @@ async function bootstrap() {
       name: 'session',
       keys: ['your-secret-key'],
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'none',  // or try 'none'
       secure: false,    // dev only!
       httpOnly: true,
     })    
