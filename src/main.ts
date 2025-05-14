@@ -25,9 +25,9 @@ async function bootstrap() {
       keys: config.cookie.keys,
       maxAge: config.cookie.maxAge,
       secure: false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'none',
       httpOnly: true,
-      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+      domain: undefined,
     }),
   );
 
@@ -53,9 +53,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(helmet());
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production' 
-      ? process.env.FRONTEND_URL // Use your production frontend URL from env var
-      : ['http://localhost:3000', 'http://127.0.0.1:3000'], // Include common localhost variations
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Always allow these origins
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
