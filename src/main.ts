@@ -25,12 +25,17 @@ async function bootstrap() {
       keys: config.cookie.keys,
       maxAge: config.cookie.maxAge,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
       httpOnly: true,
       domain: undefined,
     }),
   );
-
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Always allow these origins
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  });
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -52,12 +57,7 @@ async function bootstrap() {
   }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(helmet());
-  app.enableCors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Always allow these origins
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  });
+
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   await app.listen(config.port);
