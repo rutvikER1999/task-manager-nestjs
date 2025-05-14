@@ -21,14 +21,13 @@ async function bootstrap() {
 
   app.use(
     cookieSession({
-      name: config.cookie.name,
-      keys: config.cookie.keys,
-      maxAge: config.cookie.maxAge,
-      secure: false,
-      sameSite: 'lax',
+      name: 'session',
+      keys: ['your-secret-key'],
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'none',  // or try 'none'
+      secure: false,    // dev only!
       httpOnly: true,
-      domain: undefined,
-    }),
+    })    
   );
   app.enableCors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Always allow these origins
