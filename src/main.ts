@@ -24,6 +24,7 @@ async function bootstrap() {
       name: 'session',
       keys: ['your-secret-key'],
       maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'none',
     })    
   );
   app.enableCors({
